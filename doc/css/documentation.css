@@ -1,0 +1,171 @@
+body {
+	font-family: Verdana,Lucida,Helvetica,Arial,sans-serif;
+	line-height: normal;
+	font-size-adjust: none;
+	font-style: normal;
+	font-variant: normal;
+	text-align: justify;
+	font-size: 80%;
+	padding-bottom: 10px;
+}
+
+a {
+	color: blue;
+	text-decoration: none;
+}
+
+a:hover {
+	color: black;
+}
+
+h1, h2, h3 {
+	font-size: 160%;
+	font-weight: bold;
+	display: block;
+	margin: 0 0 1em;
+	padding: 0.5em 0 0;
+	border-bottom: 1px solid #8CACBB;
+	clear: left;
+}
+
+h1 {
+	padding-left: 5px;
+}
+
+h2 {
+	font-size: 150%;
+	font-weight: normal;
+}
+
+h3 {
+	font-size: 100%;
+	margin: 0px 0px 5px 0px;
+	border-bottom: 1px solid #CCCCCC;
+}
+
+p {
+	margin: 0 0 1em;
+	display: block;
+	line-height: 1.25em;
+	color: #333333;
+}
+
+ul,
+.spacer ol{
+	line-height: 1.5em;
+	list-style-image: none;
+	list-style-type: square;
+	margin: 0 0 0.5em 1.5em;
+	color: #333333;
+}
+
+li {
+	margin-left: 10px;
+}
+
+pre {
+	border: 1px dashed #8CACBB;
+	background-color: #DEE7EC;
+	font-size: 120%;
+	overflow: auto;
+	padding: 0.5em;
+	color: #333333;
+	margin-bottom: 5px;
+}
+
+div.spacer {
+	margin: 0px 10px;
+	padding: 10px 10px 0px;
+}
+
+div.borderedBox {
+	border: 1px solid #CCCCCC;
+	background-color: #F7F7F7;
+}
+
+table {
+	margin: 10px;
+}
+
+table.borderedBox td {
+	border: 1px solid #CCCCCC;
+	background-color: #F7F7F7;
+	padding: 10px;
+}
+
+td.menu {
+	width: 150px;
+}
+
+.menu li a, .menu li {
+	font-size: 90%;
+	list-style: none;
+}
+
+ol li {
+	list-style: decimal;
+	margin-left: 10px;
+}
+
+
+div#error {
+	display: none;
+}
+
+div.note {
+	margin: 10px;
+	font-weight: bold;
+	padding: 0;
+	height: 55px;
+	vertical-align: center;
+}
+
+div.note.ok {
+	background-color: #F0FDDE;
+	border: 1px solid #A1DF4A;
+	color: #33AA00;
+}
+
+div.note.error {
+	background-color: #FFF8D1;
+	border: 1px solid #E5CA34;
+	color: #CC0000;
+}
+
+div.note.note span {
+	text-align: center;
+	color: white;
+	display: inline;
+	font-size: 200%;
+	width: 40px;
+	height: 55px;
+	margin-right: 10px;
+	float: left;
+	line-height: 55px;
+}
+
+div.note.ok span {
+	background-color: #A1DF4A;
+}
+
+div.note.error span {
+	background-color: #E5CA34;
+}
+
+div.note p {
+	margin-top: 10px;
+	margin-right: 10px;
+}
+
+span.redphp_logo {
+	font-family: Verdana,sans-serif;
+	line-height: normal;
+	font-size-adjust: none;
+	font-style: normal;
+	font-variant: normal;
+	color: #888888;
+}
+
+span.redphp_logo_red {
+	color: red;
+}

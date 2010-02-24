@@ -1,0 +1,1 @@
+<?php $this->controller->view->show($this->pageDetails['view']); ?>
