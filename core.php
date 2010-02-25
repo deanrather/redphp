@@ -30,8 +30,8 @@
 			$this->pageDetails['scripts']	= '';
 			$this->pageDetails['styles']	= '';
 			$this->pageDetails['layout']	= 'default';
-			$this->pageDetails['title']		= $this->config['title'];
-			
+			$this->pageDetails['title']		= $this->config['title'];			$this->pageDetails['googleAnalytics'] = '';						if(isset($this->config['google_analytics_key']))			{				$this->pageDetails['googleAnalytics'] = $this->googleAnalytics($this->config['google_analytics_key']);
+			}			
 			$this->stats['queryCount']	= 0;
 			$this->stats['updateCount']	= 0;
 			$this->stats['execTime']	= microtime();		}
@@ -72,12 +72,12 @@
 				$oldController = $controller;
 				$controller = '../app/index/defaultController.php';
 				$app = 'default';
-				if(!file_exists($controller)) {
-					$this->error("You need [ <b>$oldController</b> ] or [<b>$controller</b>].");
+				if(!file_exists($controller)) {					$newInstallMsg="<hr />If you're still setting up redphp, perhaps you haven't configuerd etc/config.ini's 'index_dir'.";
+					$this->error("You need [ <b>$oldController</b> ] or [<b>$controller</b>].$newInstallMsg");
 				}
 			}
 			require_once($controller);			$controller = $app.'Controller';			if(!class_exists($controller)) $this->error("You need [ <b>class $controller extends controller</b> ].");			$this->controller = new $controller($this);
-		}				/**		 * Loads the layout.		 * The layout will tell the controller to load its page.		 */		private function display()		{			require_once('../app/_layouts/'.$this->pageDetails['layout'].'Layout.php');		}				/**		 * If 'debug' is defined in the config, it will print an error message,		 * Otherwise, it just prints a '404' for the user.		 */		public function error($message = '')		{
+		}				/**		 * Loads the layout.		 * The layout will tell the controller to load its page.		 */		private function display()		{			require_once('../app/_layouts/'.$this->pageDetails['layout'].'Layout.php');		}				private function googleAnalytics($key)		{			$return = '';						if($key)			{				$return = <<<GOOGLEANALYTICS<!-- Google Analytics Code --><script type="text/javascript"> var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));</script> <script type="text/javascript"> try {var pageTracker = _gat._getTracker("$key");pageTracker._trackPageview();} catch(err) {}</script><!-- / Google Analytics Code -->GOOGLEANALYTICS;			}						return $return;		}				/**		 * If 'debug' is defined in the config, it will print an error message,		 * Otherwise, it just prints a '404' for the user.		 */		public function error($message = '')		{
 			$log = '';
 			$log.= "<!--\n";
 			$trace=debug_backtrace();

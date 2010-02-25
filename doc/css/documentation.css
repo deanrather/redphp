@@ -157,7 +157,7 @@ div.note p {
 	margin-right: 10px;
 }
 
-span.redphp_logo {
+span.redphpLogo {
 	font-family: Verdana,sans-serif;
 	line-height: normal;
 	font-size-adjust: none;
@@ -166,6 +166,6 @@ span.redphp_logo {
 	color: #888888;
 }
 
-span.redphp_logo_red {
+span.redphpLogoRed {
 	color: red;
 }

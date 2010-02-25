@@ -10,5 +10,6 @@
 <body>
 <?php $this->controller->view->show($this->pageDetails['view']); ?>
 
+<?=$this->pageDetails['googleAnalytics']?>
 </body>
 </html>
