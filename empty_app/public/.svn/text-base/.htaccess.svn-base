@@ -1,3 +1,0 @@
-RewriteEngine on
-RewriteRule ^(.*)/(.+).(html|htm|jpeg|jpg|bmp|gif|png|css|js|class|jar)$ $1/$2.$3 [L]
-RewriteRule ^.*$ index.php
