@@ -25,7 +25,7 @@
 			require_once('globals.php');			if(file_exists('../etc/globals.php')) require_once('../etc/globals.php');
 			require_once('controller.php');			require_once('view.php');
 			require_once('table.php');
-			require_once('row.php');		}				private function loadConfig()		{			$this->config = parse_ini_file('../etc/config.ini');
+			require_once('row.php');		}				/**		 * Loads your projects ./etc/config.ini file		 * Sets $this->config, pageDetails, and stats		 */		private function loadConfig()		{			$this->config = parse_ini_file('../etc/config.ini');
 			
 			$this->pageDetails['scripts']	= '';
 			$this->pageDetails['styles']	= '';
@@ -35,7 +35,7 @@
 			$this->stats['queryCount']	= 0;
 			$this->stats['updateCount']	= 0;
 			$this->stats['execTime']	= microtime();		}
-		
+				/**		 * If the sqldump flag is set in the URI, save a copy of the db to ./etc/dbase.sql		 */
 		private function sqlDump()
 		{
 			// Check it's ok.
@@ -57,8 +57,8 @@
 				$table->sqlDump();
 			}
 		}				private function startSession()		{			if(isset($this->config['use_session']) && $this->config['use_session'])			{				session_start();			}		}
-				/**		 * Looks at the URI, cleans it, stores it in $this->uri		 * Also decides which controller (app) and view (page) to load.		 */		private function getURI()		{			$uri = $_SERVER['REQUEST_URI'];			$uri = str_replace($this->config['index_dir'],'',$uri);			$uri = trim($uri,'/');			$uri = explode('/',$uri);			// Explode returns an array with 1 empty element, instead of an empty array this line fixes that.			if(count($uri)==1 && !($uri[0])) $uri = array();						$this->uri = $uri;		}
-		
+				/**		 * Looks at the URI, cleans it, stores it in $this->uri		 */		private function getURI()		{			$uri = $_SERVER['REQUEST_URI'];			$indexDir = $this->config['index_dir'];			if($indexDir != '/') $uri = str_replace($indexDir,'',$uri);			$uri = explode('?', $uri);			$uri = $uri[0];			$uri = trim($uri,'/');			$uri = explode('/',$uri);			// Explode returns an array with 1 empty element, instead of an empty array this line fixes that.			if(count($uri)==1 && !($uri[0])) $uri = array();						$this->uri = $uri;		}
+				/**		 * Loads your projects' app.php but does not yet call init();		 */
 		private function loadApp()
 		{
 			if(file_exists('../app/app.php'))
