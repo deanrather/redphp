@@ -26,7 +26,13 @@
 			// Only do the following if we've been extended. (ie; not if someone used "new controller()"
 			if(get_class($this) != 'controller' && get_class($this) != 'app')
 			{
-				$this->view = new view($this);
+				if(class_exists('appView')) {
+					$this->view = new appView($this);	
+				}
+				else
+				{
+					$this->view = new view($this);
+				}
 				$app = (isset($core->uri[0]) ? $core->uri[0] : 'index');
 				$page = 'index';
 				if(isset($core->uri[1]) && (!is_numeric($core->uri[1]))) $page = $core->uri[1];

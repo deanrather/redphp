@@ -60,12 +60,7 @@
 				/**		 * Looks at the URI, cleans it, stores it in $this->uri		 */		private function getURI()		{			$uri = $_SERVER['REQUEST_URI'];			$indexDir = $this->config['index_dir'];			if($indexDir != '/') $uri = str_replace($indexDir,'',$uri);			$uri = explode('?', $uri);			$uri = $uri[0];			$uri = trim($uri,'/');			$uri = explode('/',$uri);			// Explode returns an array with 1 empty element, instead of an empty array this line fixes that.			if(count($uri)==1 && !($uri[0])) $uri = array();						$this->uri = $uri;		}
 				/**		 * Loads your projects' app.php but does not yet call init();		 */
 		private function loadApp()
-		{
-			if(file_exists('../app/app.php'))
-			{
-				require_once('../app/app.php');
-				$this->app = new app($this);
-			}
+		{			if(file_exists('../app/app.php'))			{				require_once('../app/app.php');				$this->app = new app($this);			}			if(file_exists('../app/view.php'))			{				require_once('../app/view.php');			}			if(file_exists('../app/controller.php'))			{				require_once('../app/controller.php');			}
 		}				/**		 * Loads the controller, tells it which page it will load later.		 * The layout will tell the controller to load the page.		 */		private function loadController()		{
 			$app = (isset($this->uri[0]) ? $this->uri[0] : 'index');
 			$controller = '../app/'.$app.'/'.$app.'Controller.php';			if(!file_exists($controller)) {
@@ -99,8 +94,7 @@
 				fwrite($file, date('r')." ========================================\n$log\n\n");
 				if(file_exists('../app/index/404View.php'))
 				{
-					$this->controller = new controller($this);
-					$this->controller->view = new view($this->controller);
+					$this->controller = new controller($this);					if(class_exists('appView')) {						$this->controller->view = new appView($this->controller);						}					else					{						$this->controller->view = new view($this->controller);					}
 					$this->pageDetails['view'] = '../app/index/404View.php';
 					require_once('../app/_layouts/'.$this->pageDetails['layout'].'Layout.php');
 					exit;
