@@ -7,8 +7,9 @@
 		 */
 		public $controller = null;
 		
-		public $table = '';		// The table name of this table
-		public $key = '';		// The primary key of this table
+		public $table = '';			// The table name of this table
+		public $key = '';			// The primary key of this table
+		private static $instance = null;	// an instance of this class
 		
 		/**
 		 * The last executed query;
@@ -19,6 +20,12 @@
 		{
 			$this->controller = $controller;
 			$this->init();
+		}
+		
+		public static function getInstance()
+		{
+			if(self::$instance === null) self::$instance = new table();
+			return self::$instance;
 		}
 		
 		protected function init()
@@ -226,7 +233,7 @@
 				$dbase = $this->controller->core->config['dbase_dbase'];
 				$host = '-h'.$this->controller->core->config['dbase_host'];
 				$user = '-u'.$this->controller->core->config['dbase_user'];
-				$mysqldump = $this->controller->core->config['mysql_dir'].'mysqldump';
+				$mysqldump = $this->controller->core->config['mysql_dir'].'mysqldump.exe';
 				$pass = ($this->controller->core->config['dbase_pass'] ? '-p'.$this->controller->core->config['dbase_pass'] : '');
 				$options = '--add-drop-database';
 				if($user == 'root') $options .= ' --lock-all-tables';
