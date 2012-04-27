@@ -25,7 +25,7 @@
 			$data = array();
 			foreach($temp as $key => $val)
 			{
-				if($key[0] != '_') $data[$key] = $val;
+				if($key[0] != '_') $data[$this->_table->clean($key)] = $this->_table->clean($val);
 			}
 			
 			if($this->_key) // Update
