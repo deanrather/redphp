@@ -121,6 +121,13 @@
 		}
 		
 		/**
+		 * Cleans a string. should be used before entering data into a query.
+		 */
+		public function clean($string){
+			return mysql_real_escape_string($string, $this->controller->core->dbase);
+		}
+		
+		/**
 		 * Use this to run INSERT queries on the database
 		 * It will return the ID of the last inserted row
 		 */
