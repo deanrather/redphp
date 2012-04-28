@@ -16,6 +16,11 @@
 		 */
 		public $lastQuery;
 		
+		/**
+		 * The result of the last executed query;
+		 */
+		public $lastResult;
+		
 		public function table($controller)
 		{
 			$this->controller = $controller;
@@ -39,14 +44,14 @@
 			{
 				if(isset_true($this->controller->core->config['dbase_host']))
 				{
-					$this->controller->core->dbase = mysql_connect
+					$this->controller->core->dbase = mysqli_connect
 					(
 						$this->controller->core->config['dbase_host'],
 						$this->controller->core->config['dbase_user'],
 						$this->controller->core->config['dbase_pass']
 					);
 					
-					if(!mysql_select_db($this->controller->core->config['dbase_dbase']))
+					if(!mysqli_select_db($this->controller->core->dbase, $this->controller->core->config['dbase_dbase']))
 					{
 						$this->controller->core->error('Cannot connect to database.');
 					}
@@ -71,20 +76,20 @@
 			if($checkSelect && substr(trim($query), 0, 6) != 'SELECT') $this->controller->core->error('query() wants a SELECT query. not<br />'.$query);
 			
 			$this->lastQuery  = $query;
-			$result = mysql_query($query);
+			$result = mysqli_query($this->controller->core->dbase, $query);
 			if(!$result) $this->controller->core->error("Query Failed.<hr /><pre>$query");
-			$count = mysql_num_rows($result);
+			$count = mysqli_num_rows($result);
 			$data = array();
 			for ($i=0; $i < $count; $i++)
 			{
 				if($depth=='COL' || $depth=='CELL')
 				{
-					$row = mysql_fetch_array($result, MYSQL_NUM);
+					$row = mysqli_fetch_array($result, MYSQL_NUM);
 					$data[] = $row[0];
 				}
 				else
 				{
-					$data[] = mysql_fetch_array($result, MYSQL_ASSOC);
+					$data[] = mysqli_fetch_array($result, MYSQL_ASSOC);
 				}
 			}
 			
@@ -114,17 +119,18 @@
 		{
 			$this->connectDB();
 			$this->lastQuery = $query;
-			$result = mysql_query($query);
+			$result = mysqli_query($this->controller->core->dbase, $query);
+			$this->lastResult = $result;
 			if(!$result) $this->controller->core->error("Query Failed.<hr /><pre>$query");
 			$this->controller->core->stats['updateCount']++;
-			return mysql_affected_rows($this->controller->core->dbase);
+			return mysqli_affected_rows($this->controller->core->dbase);
 		}
 		
 		/**
 		 * Cleans a string. should be used before entering data into a query.
 		 */
 		public function clean($string){
-			return mysql_real_escape_string($string, $this->controller->core->dbase);
+			return mysqli_real_escape_string($this->controller->core->dbase, $string);
 		}
 		
 		/**
@@ -134,10 +140,10 @@
 		public function insert($query)
 		{
 			$this->connectDB();
-			$result = mysql_query($query);
+			$result = mysqli_query($query);
 			if(!$result) $this->controller->core->error("Query Failed.<hr /><pre>$query");
 			$this->controller->core->stats['updateCount']++;
-			return mysql_insert_id($this->controller->core->dbase);
+			return mysqli_insert_id($this->controller->core->dbase);
 		}
 		
 		/**
@@ -333,6 +339,23 @@
 			$sql .= implode(', ', $elements);
 			$sql .= " WHERE `$this->key` = '$keyVal'";
 			return $this->update($sql);
+		}
+		
+		public function beginTransaction(){
+			$this->connectDB();
+			mysqli_autocommit($this->controller->core->dbase, false);
+		}
+		
+		public function rollBack(){
+			$this->connectDB();
+			mysqli_rollback($this->controller->core->dbase);
+			mysqli_autocommit($this->controller->core->dbase, true);
+		}
+		
+		public function endTransaction(){
+			$this->connectDB();
+			mysqli_commit($this->controller->core->dbase);
+			mysqli_autocommit($this->controller->core->dbase, true);
 		}
 	}
 ?>

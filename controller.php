@@ -127,7 +127,7 @@
 		public function setNote($note='OK')
 		{
 			if(!session_id()) $this->core->error('You must use session_start(), or have "use_session" enabled in config.ini to use setNote().');
-			$existingNote = isset_val($_SESSION['note']);
+			$existingNote = $_SESSION['note'];
 			if($existingNote) $note = $existingNote.'<br>'.$note;
 			$_SESSION['note'] = $note;
 		}
@@ -139,6 +139,8 @@
 		public function setError($error='Error')
 		{
 			if(!session_id()) $this->core->error('You must use session_start(), or have "use_session" enabled in config.ini to use setError().');
+			$existingError = $_SESSION['error'];
+			if($existingError) $error = $existingError.'<br>'.$error;
 			$_SESSION['error'] = $error;
 		}
 		
