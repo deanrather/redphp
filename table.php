@@ -76,6 +76,7 @@
 			if($checkSelect && substr(trim($query), 0, 6) != 'SELECT') $this->controller->core->error('query() wants a SELECT query. not<br />'.$query);
 			
 			$this->lastQuery  = $query;
+			$this->debug($query);
 			$result = mysqli_query($this->controller->core->dbase, $query);
 			if(!$result) $this->controller->core->error("Query Failed.<hr /><pre>$query");
 			$count = mysqli_num_rows($result);
@@ -119,6 +120,7 @@
 		{
 			$this->connectDB();
 			$this->lastQuery = $query;
+			$this->debug($query);
 			$result = mysqli_query($this->controller->core->dbase, $query);
 			$this->lastResult = $result;
 			if(!$result) $this->controller->core->error("Query Failed.<hr /><pre>$query");
@@ -140,7 +142,8 @@
 		public function insert($query)
 		{
 			$this->connectDB();
-			$result = mysqli_query($query);
+			$this->debug($query);
+			$result = mysqli_query($this->controller->core->dbase, $query);
 			if(!$result) $this->controller->core->error("Query Failed.<hr /><pre>$query");
 			$this->controller->core->stats['updateCount']++;
 			return mysqli_insert_id($this->controller->core->dbase);
@@ -294,6 +297,7 @@
 			$row = $this->createRow();
 			$row->_key = $id;
 			$data = $this->get('*',$id);
+			if(sizeof($data)==1) $data = $data[0];
 			foreach($data as $key => $val) $row->$key = $val;
 			return $row;
 		}
@@ -339,6 +343,17 @@
 			$sql .= implode(', ', $elements);
 			$sql .= " WHERE `$this->key` = '$keyVal'";
 			return $this->update($sql);
+		}
+		
+		private function debug($query) {
+		
+			if(!$this->controller->core->config['debug']) return;
+			
+			$trace=debug_backtrace();
+			$file = $trace[2];
+			$string = $file['file'].' ('.$file['line']."):\n";
+			$this->controller->core->queries[] = $string . $query;
+			
 		}
 		
 		public function beginTransaction(){

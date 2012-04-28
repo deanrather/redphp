@@ -10,18 +10,11 @@
 		 * @var controller
 		 */
 		public $controller = null;
-				public $config		= array();	// Loaded from /etc/config.ini		public $uri			= array();	// [0] and [1] load a controller and view		public $pageDetails	= array();	// used from the layout
-		public $stats		= array();	// Statistics defined in loadConfig
+				public $config		= array();	// Loaded from /etc/config.ini		public $uri			= array();	// [0] and [1] load a controller and view		public $pageDetails	= array();	// used from the layout		public $stats		= array();	// Statistics defined in loadConfig		public $queries		= array();	// A Log of all the queries
 		public $dbase		= null; 	// The mysql dbase resource. Created when it needs to be.
 				public function Core()		{			$this->getIncludes();			$this->loadConfig();
 			$this->sqlDump();			$this->startSession();			$this->getURI();
-			$this->loadApp();			$this->loadController();			$this->display();
-			if(isset_true($this->config['debug']) && isset_true($this->config['stats']))
-			{
-				print '<hr />Queries: '.$this->stats['queryCount'];
-				print '<br />Updates: '.$this->stats['updateCount'];
-				print '<br />Time: '.number_format(microtime()-$this->stats['updateCount'],3);
-			}		}				private function getIncludes()		{
+			$this->loadApp();			$this->loadController();			$this->display();			$this->debug();		}				private function getIncludes()		{
 			require_once('globals.php');			if(file_exists('../etc/globals.php')) require_once('../etc/globals.php');
 			require_once('controller.php');			require_once('view.php');
 			require_once('table.php');
@@ -102,4 +95,4 @@
 				{
 					die('404');
 				}
-			}		}	}?>
+			}		}				private function debug(){					if(!isset_true($this->config['debug'])) return;						if(isset_true($this->config['queries']) || isset($_GET['queries']))			{				print "<hr>All Queries:<pre>";				foreach($this->queries as $query) echo "\n\n$query";				print "</pre>";			}						if(isset_true($this->config['stats']) || isset($_GET['stats']))			{				print '<hr />Queries: '.$this->stats['queryCount'];				print '<br />Updates: '.$this->stats['updateCount'];				print '<br />Time: '.number_format(microtime()-$this->stats['updateCount'],3);			}		}	}?>
