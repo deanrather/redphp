@@ -8,7 +8,7 @@
 	}
 	
 	/**
-	 * returns the value if isset() is true, else, returns false.
+	 * returns the value if isset(), otherwise returns false.
 	 */
 	function isset_val(&$data)
 	{

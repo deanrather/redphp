@@ -127,6 +127,8 @@
 		public function setNote($note='OK')
 		{
 			if(!session_id()) $this->core->error('You must use session_start(), or have "use_session" enabled in config.ini to use setNote().');
+			$existingNote = isset_val($_SESSION['note']);
+			if($existingNote) $note = $existingNote.'<br>'.$note;
 			$_SESSION['note'] = $note;
 		}
 		
