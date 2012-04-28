@@ -31,10 +31,10 @@
 			$this->pageDetails['styles']	= '';
 			$this->pageDetails['layout']	= 'default';
 			$this->pageDetails['title']		= $this->config['title'];			$this->pageDetails['googleAnalytics'] = '';						if(isset($this->config['google_analytics_key']))			{				$this->pageDetails['googleAnalytics'] = $this->googleAnalytics($this->config['google_analytics_key']);
-			}			
+			}						if(isset_true($this->config['timezone'])) date_default_timezone_set($this->config['timezone']);			
 			$this->stats['queryCount']	= 0;
 			$this->stats['updateCount']	= 0;
-			$this->stats['execTime']	= microtime();		}
+			$this->stats['execTime']	= microtime();					}
 				/**		 * If the sqldump flag is set in the URI, save a copy of the db to ./etc/dbase.sql		 */
 		private function sqlDump()
 		{
