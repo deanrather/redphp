@@ -91,21 +91,23 @@
 				if($depth=='COL' || $depth=='CELL')
 				{
 					$row = mysqli_fetch_array($result, MYSQL_NUM);
-					$data[] = $row[0];
+					$data[] = $this->unclean($row[0]);
 				}
-				else
+				else // ALL or ROW
 				{
-					$data[] = mysqli_fetch_array($result, MYSQL_ASSOC);
+					$data[] = $this->unclean(mysqli_fetch_array($result, MYSQL_ASSOC));
 				}
 			}
 			
+			// If we're just returning 1 row, just return that one row
 			if($depth=='ROW' && count($data)) $data = $data[0];
 			
+			// If we're just returning one cell, just get that piece of data.
 			if($depth=='CELL')
 			{
 				if(count($data))
 				{
-					$data = $data[0];
+					$data = $this->unclean($data[0]);
 				}
 				else
 				{
@@ -140,6 +142,19 @@
 		public function clean($string){
 			return mysqli_real_escape_string($this->controller->core->dbase, $string);
 		}
+		
+		public function unclean($string){
+			return $string; // this function is not behaving as I hoped
+			if(is_string($string)) return stripslashes($string);
+			if(is_array($string)) {
+				$return = array();
+				foreach($string as $key => $val) {
+					$return[$key] = $this->unclean($val);
+				}
+				return $return;
+			}
+		}
+		
 		
 		/**
 		 * Use this to run INSERT queries on the database
