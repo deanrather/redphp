@@ -10,6 +10,9 @@
 		public $table = '';			// The table name of this table
 		public $key = '';			// The primary key of this table
 		private static $instance = null;	// an instance of this class
+		private $cacheNextQuery = false; // use cacheNextQuery() before doing query and it will be cached or returned from cache
+		private $cache = array();
+		
 		
 		/**
 		 * The last executed query;
@@ -72,6 +75,8 @@
 		 */
 		public function query($query, $depth='ALL', $checkSelect=true)
 		{
+			if($this->cacheNextQuery && isset($this->cache[md5($query)])) return $this->cache[md5($query)];
+			
 			$this->connectDB();
 			if($checkSelect && substr(trim($query), 0, 6) != 'SELECT') $this->controller->core->error('query() wants a SELECT query. not<br />'.$query);
 			
@@ -109,6 +114,7 @@
 			}
 			
 			$this->controller->core->stats['queryCount']++;
+			if($this->cacheNextQuery) return $this->cache[md5($query)] = $data;
 			return $data;
 		}
 		
@@ -283,9 +289,25 @@
 		 * Returns a new empty row belonging to this table.
 		 * @return row
 		 */
-		public function createRow()
+		public function createRow($userID = false)
 		{
-			return new row($this);
+			$file = "../app/_tables/".$this->table.'Row.php';
+			if(file_exists($file)) {
+				require_once($file);
+				$class = $this->table.'Row';
+				$row = new $class($this);
+			}
+			else
+			{
+				$row =  new row($this);
+			}
+			
+			if($userID){
+				$row->create_user = $userID;
+				$row->create_date = time();
+			}
+			
+			return $row;
 		}
 		
 		/**
@@ -350,7 +372,11 @@
 			if(!$this->controller->core->config['debug']) return;
 			
 			$trace=debug_backtrace();
-			$file = $trace[2];
+			$i=0;
+			$file = $trace[$i];
+			while(strstr($file['file'], 'redphp')) {
+				$file = $trace[++$i];
+			}
 			$string = $file['file'].' ('.$file['line']."):\n";
 			$this->controller->core->queries[] = $string . $query;
 			
@@ -371,6 +397,29 @@
 			$this->connectDB();
 			mysqli_commit($this->controller->core->dbase);
 			mysqli_autocommit($this->controller->core->dbase, true);
+		}
+		
+		public function cacheNextQuery(){
+			$this->cacheNextQuery = true;
+		}
+	
+	
+		/**
+		 * Takes a column name like "email_address" and fancifies it to "Email Address"
+		 */
+		public function fancify($str){
+			$str = str_replace('_', ' ', $str);
+			$str = ucwords($str);
+			return $str;
+		}
+	
+		/**
+		 * Takes a fancy column name like "Email Address" and unfancifies it to "email_address"
+		 */
+		public function unfancify($str){
+			$str = str_replace(' ', '_', $str);
+			$str = strtolower($str);
+			return $str;
 		}
 	}
 ?>

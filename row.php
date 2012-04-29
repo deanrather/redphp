@@ -30,13 +30,31 @@
 			
 			if($this->_key) // Update
 			{
-				return $this->_table->rowUpdate($data, $this->_key);
+				$this->id = $this->_key;
+				$this->_table->rowUpdate($data, $this->_key);
+				return $this->id;
 			}
 			else // Insert
 			{
 				$this->_key = $this->_table->rowInsert($data);
+				$this->id = $this->_key;
 				return $this->_key;
 			}
+		}
+		
+		public function insertData($data)
+		{
+			foreach($data as $col => $value) {
+				$this->$col = $value;
+			}
+			$this->edit_user = $_SESSION['user_id'];
+			$this->edit_date = time();
+		}
+		
+		public function getDefault($col) {
+			$col = str_replace(' ', '', $this->_table->fancify($col));
+			$variable = '_default'.$col;
+			return isset_val($this->$variable);
 		}
 	}
 ?>
