@@ -177,7 +177,7 @@
 		 * Integer:	"WHERE primary_key = <yourInt>" 1 row
 		 * String:	"WHERE <yourString>" n rows
 		 */
-		public function get($cols='*', $where=null, $sort=1)
+		public function get($cols='*', $where=null, $sort=1, $join='')
 		{
 			if($this->table == '') die('Tables need the $table set.');
 			
@@ -201,7 +201,7 @@
 					$depth = 'ROW';
 				}
 			}
-			return $this->query("SELECT $cols FROM `$this->table` WHERE $where ORDER BY $sort;", $depth);
+			return $this->query("SELECT $cols FROM `$this->table` $join WHERE $where ORDER BY $sort;", $depth);
 		}
 		
 		public function getCount($where=1)
@@ -343,9 +343,9 @@
 		 * Gets several rows of this table, returns the row objects in an array.
 		 * @return unknown array(row)
 		 */
-		public function getRows($cols='*', $where=null, $sort=1)
+		public function getRows($cols='*', $where=null, $sort=1, $join='')
 		{
-			$data=$this->get($cols, $where, $sort);
+			$data=$this->get($cols, $where, $sort, $join);
 			$rows = array();
 			foreach($data as $rowArray)
 			{
