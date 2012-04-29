@@ -45,7 +45,7 @@
 		public function insertData($data)
 		{
 			foreach($data as $col => $value) {
-				$this->$col = $value;
+				if(!is_array($value)) $this->$col = $value;
 			}
 			$this->edit_user = $_SESSION['user_id'];
 			$this->edit_date = time();
@@ -55,6 +55,39 @@
 			$col = str_replace(' ', '', $this->_table->fancify($col));
 			$variable = '_default'.$col;
 			return isset_val($this->$variable);
+		}
+		
+		public function attachTable($otherTable, $data){
+		
+			$thisTable = $this->_table->table;
+			$joinTable = $thisTable.'_'.$otherTable;
+			
+			$this->_table->beginTransaction();
+			$myID = $this->id;
+			
+			// Out with the old
+			$query = "DELETE FROM $joinTable WHERE $thisTable = $myID";
+			$this->_table->update($query);
+			
+			$myUserID = $_SESSION['user_id'];
+			$now = time();
+			
+			// In with the new
+			$postVar = $otherTable.'-list';
+			if(isset_true($data[$postVar]) && is_array($data[$postVar])) {
+				foreach($data[$postVar] as $otherTableID) {
+					$otherTableID = $this->_table->clean($otherTableID);
+					$query = "
+						 INSERT INTO `$joinTable`
+						 	(`$otherTable`, `$thisTable`,`create_user`,`create_date`,`edit_user`,`edit_date`)
+						 VALUES
+						 	('$otherTableID', '$myID', '$myUserID', '$now', '$myUserID', '$now')
+						";
+					$this->_table->update($query);
+				}
+			}
+			$this->_table->endTransaction();
+			
 		}
 	}
 ?>
