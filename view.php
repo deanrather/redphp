@@ -6,6 +6,11 @@
 		 * @var controller
 		 */
 		public $controller = null;
+	
+		protected function init()
+		{
+			// Override me with your own constructor (optional).
+		}
 		
 		public function view($controller)
 		{

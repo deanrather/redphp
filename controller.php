@@ -33,6 +33,7 @@
 				{
 					$this->view = new view($this);
 				}
+				$this->view->init();
 				$app = (isset($core->uri[0]) ? $core->uri[0] : 'index');
 				$page = 'index';
 				if(isset($core->uri[1]) && (!is_numeric($core->uri[1]))) $page = $core->uri[1];
