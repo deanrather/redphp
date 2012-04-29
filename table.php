@@ -144,7 +144,7 @@
 		}
 		
 		public function unclean($string){
-			return $string; // this function is not behaving as I hoped
+			return $string; // this function is not behaving as I hoped - test
 			if(is_string($string)) return stripslashes($string);
 			if(is_array($string)) {
 				$return = array();
