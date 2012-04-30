@@ -36,7 +36,7 @@
 				$this->view->init();
 				$app = (isset($core->uri[0]) ? $core->uri[0] : 'index');
 				$page = 'index';
-				if(isset($core->uri[1]) && (!is_numeric($core->uri[1]))) $page = $core->uri[1];
+				if(isset($core->uri[1])) $page = $core->uri[1];
 				$action = $page.'View';
 				if(!method_exists($this, $action)) $action='defaultView';
 				$this->core->pageDetails['view'] = '../app/'.$app.'/'.$app.($page=='index' ? '' : '-'.$page).'View.php';
@@ -102,7 +102,7 @@
 			if(!class_exists($table)) $this->core->error("Error opening table. [<b> $file </b>] needs [<b> class $table extends table</b>].");
 			return new $table($this);
 		}
-		
+	
 		/**
 		 * Redirect to another page.
 		 * Defaults to the current page (good for clearing POST)
@@ -118,6 +118,19 @@
 			$url = 'http://'.$_SERVER['HTTP_HOST'].$indexDir.$url;
 			
 			// send them to new url
+			header("location:$url");
+			exit;
+		}
+		
+		/**
+		 * Redirect back to the previous page (good for clearing POST)
+		 */
+		public function redirectBack()
+		{	
+			// check nothings been printed yet
+			if(ob_get_contents()) $this->core->error("Shouldn't redirect. There's output.");
+			
+			$url = $_SERVER['HTTP_REFERER'];
 			header("location:$url");
 			exit;
 		}
