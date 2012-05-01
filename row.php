@@ -89,5 +89,20 @@
 			$this->_table->endTransaction();
 			
 		}
+		
+		public function getAttachedTable($otherTable) {
+			
+			$thisTable = $this->_table->table;
+			$joinTable = $thisTable.'_'.$otherTable;
+			
+			$otherTableClass = $this->_table->controller->newTable($otherTable);
+			
+			$where = "$joinTable.$thisTable=$this->id";
+			$join = "LEFT JOIN $joinTable ON $joinTable.$otherTable = $otherTable.id";
+			
+			$result = $otherTableClass->getRows("*, `$otherTable`.id as 'otherTableID'", $where, "$otherTable.id", $join);
+			if(!$result) $result = array();
+			
+			return $result;
+		}
 	}
-?>
