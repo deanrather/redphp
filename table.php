@@ -91,11 +91,11 @@
 				if($depth=='COL' || $depth=='CELL')
 				{
 					$row = mysqli_fetch_array($result, MYSQL_NUM);
-					$data[] = $this->unclean($row[0]);
+					$data[] = $row[0];
 				}
 				else // ALL or ROW
 				{
-					$data[] = $this->unclean(mysqli_fetch_array($result, MYSQL_ASSOC));
+					$data[] = mysqli_fetch_array($result, MYSQL_ASSOC);
 				}
 			}
 			
@@ -107,7 +107,7 @@
 			{
 				if(count($data))
 				{
-					$data = $this->unclean($data[0]);
+					$data = $data[0];
 				}
 				else
 				{
@@ -143,19 +143,6 @@
 			return mysqli_real_escape_string($this->controller->core->dbase, $string);
 		}
 		
-		public function unclean($string){
-			return $string; // this function is not behaving as I hoped - test3
-			if(is_string($string)) return stripslashes($string);
-			if(is_array($string)) {
-				$return = array();
-				foreach($string as $key => $val) {
-					$return[$key] = $this->unclean($val);
-				}
-				return $return;
-			}
-		}
-		
-		
 		/**
 		 * Use this to run INSERT queries on the database
 		 * It will return the ID of the last inserted row
@@ -179,10 +166,11 @@
 		 */
 		public function get($cols='*', $where=null, $sort=1, $join='')
 		{
-			if($this->table == '') die('Tables need the $table set.');
+			if($this->table == '') $this->controller->core->error('Tables need the $table set.');
+			if($cols=='*' && $join) $this->controller->core->error('You shouldnt select for * when using a join. Its likely some columns will overlap.');
 			
 			$depth = 'ALL';
-			if($cols!='*' && !strpos($cols,',')) $depth = 'COL';
+			if(!strstr($cols, '*') && !strpos($cols,',')) $depth = 'COL';
 			
 			if($where == null)
 			{
@@ -190,7 +178,7 @@
 			}
 			elseif(is_numeric($where))
 			{
-				if($this->key == '') die($this->table.' table need the $key set to use get(string, int).');
+				if($this->key == '') $this->controller->core->error($this->table.' table need the $key set to use get(string, int).');
 				$where = "$this->key = $where";
 				if($depth=='COL')
 				{
@@ -201,12 +189,13 @@
 					$depth = 'ROW';
 				}
 			}
-			return $this->query("SELECT $cols FROM `$this->table` $join WHERE $where ORDER BY $sort;", $depth);
+			$query = "SELECT $cols FROM `$this->table` $join WHERE $where ORDER BY $sort;";
+			return $this->query($query, $depth);
 		}
 		
 		public function getCount($where=1)
 		{
-			if($this->table == '') die('Tables need the $table set.');
+			if($this->table == '') $this->controller->core->error('Tables need the $table set.');
 			$return = $this->query("SELECT COUNT(1) FROM `$this->table` WHERE $where", 'CELL');
 			return $return;
 		}
@@ -231,7 +220,7 @@
 				}
 				elseif(is_numeric($where))
 				{
-					if($this->key == '') die($this->table.' table need the $key set to use set(string, string, int).');
+					if($this->key == '') $this->controller->core->error($this->table.' table need the $key set to use set(string, string, int).');
 					$where = "$this->key = $where";
 				}
 				$return = $this->update("UPDATE $this->table SET $what = $to WHERE $where;");

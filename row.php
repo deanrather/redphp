@@ -23,29 +23,40 @@
 			// Ignore class variables
 			$temp = get_object_vars($this);
 			$data = array();
+			$foreignTables = array();
 			foreach($temp as $key => $val)
 			{
-				if($key[0] != '_') $data[$this->_table->clean($key)] = $this->_table->clean($val);
+				if($key[0] != '_' && !is_array($val) ) {
+					$data[$this->_table->clean($key)] = $this->_table->clean($val);
+				}
+				
+				// Check for foreign tables
+				if(is_array($val) && substr($key, -5) == '-list') {
+					$foreignTables[substr($key, 0, -5)] = $val;
+				}
 			}
 			
 			if($this->_key) // Update
 			{
 				$this->id = $this->_key;
 				$this->_table->rowUpdate($data, $this->_key);
-				return $this->id;
 			}
 			else // Insert
 			{
 				$this->_key = $this->_table->rowInsert($data);
 				$this->id = $this->_key;
-				return $this->_key;
 			}
+			
+			// Update foreign tables
+			foreach($foreignTables as $table => $data) $this->attachTable($table, $data);
+			
+			return $this->id;
 		}
 		
 		public function insertData($data)
 		{
 			foreach($data as $col => $value) {
-				if(!is_array($value)) $this->$col = $value;
+				$this->$col = $value;
 			}
 			$this->edit_user = $_SESSION['user_id'];
 			$this->edit_date = time();
@@ -73,20 +84,17 @@
 			$now = time();
 			
 			// In with the new
-			$postVar = $otherTable.'-list';
-			if(isset_true($data[$postVar]) && is_array($data[$postVar])) {
-				foreach($data[$postVar] as $otherTableID) {
-					$otherTableID = $this->_table->clean($otherTableID);
-					$query = "
-						 INSERT INTO `$joinTable`
-						 	(`$otherTable`, `$thisTable`,`create_user`,`create_date`,`edit_user`,`edit_date`)
-						 VALUES
-						 	('$otherTableID', '$myID', '$myUserID', '$now', '$myUserID', '$now')
-						";
-					$this->_table->update($query);
-				}
-			}
+			foreach($data as $otherTableID) {
+				$otherTableID = $this->_table->clean($otherTableID);
+				$query = "
+					 INSERT INTO `$joinTable`
+					 	(`$otherTable`, `$thisTable`,`create_user`,`create_date`,`edit_user`,`edit_date`)
+					 VALUES
+					 	('$otherTableID', '$myID', '$myUserID', '$now', '$myUserID', '$now')
+					";
+				$this->_table->update($query);
 			$this->_table->endTransaction();
+			}
 			
 		}
 		
@@ -100,7 +108,7 @@
 			$where = "$joinTable.$thisTable=$this->id";
 			$join = "LEFT JOIN $joinTable ON $joinTable.$otherTable = $otherTable.id";
 			
-			$result = $otherTableClass->getRows("*, `$otherTable`.id as 'otherTableID'", $where, "$otherTable.id", $join);
+			$result = $otherTableClass->getRows("`$otherTable`.*", $where, "$otherTable.id", $join);
 			if(!$result) $result = array();
 			
 			return $result;
