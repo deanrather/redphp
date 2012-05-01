@@ -31,11 +31,6 @@
 			require("../app/$view");
 		}
 		
-		public function makeUrl($part='')
-		{
-			return $this->controller->core->config['index_dir'].$part;
-		}
-		
 		/**
 		 * Gets the note stored from a controller in setNote().
 		 * You can pass in a string like <p>%</p>, and we'll

@@ -50,7 +50,7 @@
 				$table->sqlDump();
 			}
 		}				private function startSession()		{			if(isset($this->config['use_session']) && $this->config['use_session'])			{				session_start();			}		}
-				/**		 * Looks at the URI, cleans it, stores it in $this->uri		 */		private function getURI()		{			$uri = $_SERVER['REQUEST_URI'];			$indexDir = $this->config['index_dir'];			if($indexDir != '/') $uri = str_replace($indexDir,'',$uri);			$uri = explode('?', $uri);			$uri = $uri[0];			$uri = trim($uri,'/');			$uri = explode('/',$uri);			// Explode returns an array with 1 empty element, instead of an empty array this line fixes that.			if(count($uri)==1 && !($uri[0])) $uri = array();						$this->uri = $uri;		}
+				/**		 * Looks at the URI, cleans it, stores it in $this->uri		 */		private function getURI()		{			$uri = $_SERVER['REQUEST_URI'];			$uri = explode('?', $uri);			$uri = $uri[0];			$uri = trim($uri,'/');			$uri = explode('/',$uri);			// Explode returns an array with 1 empty element, instead of an empty array this line fixes that.			if(count($uri)==1 && !($uri[0])) $uri = array();						$this->uri = $uri;		}
 				/**		 * Loads your projects' app.php but does not yet call init();		 */
 		private function loadApp()
 		{			if(file_exists('../app/app.php'))			{				require_once('../app/app.php');				$this->app = new app($this);			}			if(file_exists('../app/view.php'))			{				require_once('../app/view.php');			}			if(file_exists('../app/controller.php'))			{				require_once('../app/controller.php');			}
@@ -59,7 +59,7 @@
 					$oldController = $controller;
 					$controller = '../app/index/defaultController.php';
 					$page = 'default';
-					if(!file_exists($controller)) {						$newInstallMsg="<hr />If you're still setting up redphp, perhaps you haven't configuerd etc/config.ini's 'index_dir'.";
+					if(!file_exists($controller)) {						$newInstallMsg="<hr />If you're still setting up redphp, perhaps dean should update this error message.";
 						$this->error("You need [ <b>$oldController</b> ] or [<b>$controller</b>].$newInstallMsg");
 					}				}
 			}

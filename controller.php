@@ -78,7 +78,7 @@
 		 */
 		public function addJS($script)
 		{
-			$this->core->pageDetails['scripts'] .= '<script type="text/javascript" charset="ISO-8859-1" src="'.$this->core->config['index_dir'].'js/'.$script.'.js"></script>'."\n";
+			$this->core->pageDetails['scripts'] .= '<script type="text/javascript" charset="ISO-8859-1" src="/js/'.$script.'.js"></script>'."\n";
 		}
 		
 		/**
@@ -86,7 +86,7 @@
 		 */
 		public function addCSS($style)
 		{
-			$this->core->pageDetails['styles'] .= '<link rel="stylesheet" type="text/css" href="'.$this->core->config['index_dir'].'css/'.$style.'.css" />'."\n";
+			$this->core->pageDetails['styles'] .= '<link rel="stylesheet" type="text/css" href="/css/'.$style.'.css" />'."\n";
 		}
 		
 		/**
@@ -113,9 +113,11 @@
 			if(ob_get_contents()) $this->core->error("Shouldn't redirect. There's output.");
 			
 			// Generate new URL
-			$indexDir = $this->core->config['index_dir'];
-			if(!$url) $url = str_replace($indexDir,'',$_SERVER['REQUEST_URI']);
-			$url = 'http://'.$_SERVER['HTTP_HOST'].$indexDir.$url;
+			if(!$url) $url = $_SERVER['REQUEST_URI'];
+			
+			$slash = ($url[0]=='/' ? '' : '/');
+			
+			$url = 'http://'.$_SERVER['HTTP_HOST'].$slash.$url;
 			
 			// send them to new url
 			header("location:$url");
