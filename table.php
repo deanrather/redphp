@@ -413,6 +413,7 @@
 		 */
 		public function fancify($str){
 			$str = str_replace('_', ' ', $str);
+			$str = str_replace('-', ' ', $str);
 			$str = ucwords($str);
 			return $str;
 		}

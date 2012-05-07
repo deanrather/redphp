@@ -52,7 +52,7 @@
 			$this->core->error("You need [ <b>$page</b> ] or [ <b>defaultView()</b> ] in this controller.");
 		}
 		
-		protected function init()
+		public function init()
 		{
 			// Override me with your own constructor (optional).
 		}

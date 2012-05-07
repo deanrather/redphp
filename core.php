@@ -10,7 +10,7 @@
 		 * @var controller
 		 */
 		public $controller = null;
-				public $config		= array();	// Loaded from /etc/config.ini		public $uri			= array();	// [0] and [1] load a controller and view		public $pageDetails	= array();	// used from the layout		public $stats		= array();	// Statistics defined in loadConfig		public $queries		= array();	// A Log of all the queries
+				/**		 * eg: domain.com/[0]/[1]/[2]/		 */		public $uri			= array();	// [0] and [1] load a controller and view		public $config		= array();	// Loaded from /etc/config.ini		public $pageDetails	= array();	// used from the layout		public $stats		= array();	// Statistics defined in loadConfig		public $queries		= array();	// A Log of all the queries
 		public $dbase		= null; 	// The mysql dbase resource. Created when it needs to be.
 				public function Core()		{			$this->getIncludes();			$this->loadConfig();
 			$this->sqlDump();			$this->startSession();			$this->getURI();
