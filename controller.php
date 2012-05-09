@@ -82,6 +82,14 @@
 		}
 		
 		/**
+		 * Add inline JS to the head
+		 */
+		public function addInlineJS($script)
+		{
+			$this->core->pageDetails['scripts'] .= '<script type="text/javascript" charset="ISO-8859-1">'.$script.'</script>'."\n";
+		}
+		
+		/**
 		 * Add another .css file to the head
 		 */
 		public function addCSS($style)
