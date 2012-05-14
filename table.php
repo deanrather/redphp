@@ -11,6 +11,7 @@
 		public $key = '';			// The primary key of this table
 		private static $instance = null;	// an instance of this class
 		private $cacheNextQuery = false; // use cacheNextQuery() before doing query and it will be cached or returned from cache
+		private $debugNextQuery = false; // use debugNextQuery() before doing a query and it will be displayed instead of performed
 		private $cache = array();
 		
 		
@@ -307,8 +308,10 @@
 			}
 			
 			if($userID){
-				$row->create_user = $userID;
+				$row->create_user_id = $userID;
 				$row->create_date = time();
+				$row->edit_user_id = $userID;
+				$row->edit_date = time();
 			}
 			
 			return $row;
@@ -372,8 +375,13 @@
 		}
 		
 		private function debug($query) {
-		
+			
 			if(!$this->controller->core->config['debug']) return;
+		
+			if($this->debugNextQuery) {
+				debug($query);
+				exit;
+			}
 			
 			$trace=debug_backtrace();
 			$i=0;
@@ -382,7 +390,13 @@
 				$file = $trace[++$i];
 			}
 			$string = $file['file'].' ('.$file['line']."):\n";
-			$this->controller->core->queries[] = $string . $query;
+			$log = $string . $query;
+			$this->controller->core->queries[] = $log;
+			
+			if(!isset_true($_GET['sql-log'])) {
+				$date = date('Y-m-d H:i:s');
+				file_put_contents(_PUBLIC_DIR_.'/../etc/sql.log', "\n\n$date\n$log", FILE_APPEND);
+			}
 			
 		}
 		
@@ -420,11 +434,27 @@
 	
 		/**
 		 * Takes a fancy column name like "Email Address" and unfancifies it to "email_address"
+		 * Also fancifies column_id to Column ID
 		 */
 		public function unfancify($str){
-			$str = str_replace(' ', '_', $str);
+//			$str = str_replace(' ', '_', $str);
+			$str = explode('_', $str);
+			$a = array();
+			foreach($str as $word)
+			{
+				if(strtolower($word)=='id') $word="ID";
+				$a[] = $word;
+			}
+			$str = implode(' ', $word);
 			$str = strtolower($str);
 			return $str;
+		}
+		
+		/**
+		 * Used for debug purposes. Insted of actually performing the query, just generates it and spits it out.
+		 */
+		public function debugNextQuery(){
+			$this->debugNextQuery = true;
 		}
 	}
 ?>

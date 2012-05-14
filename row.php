@@ -58,11 +58,12 @@
 			foreach($data as $col => $value) {
 				$this->$col = $value;
 			}
-			$this->edit_user = $_SESSION['user_id'];
+			$this->edit_user_id = $_SESSION['user_id'];
 			$this->edit_date = time();
 		}
 		
 		public function getDefault($col) {
+			if(right(3, $col) == '_id') $col = right(-3, ($col));
 			$col = str_replace(' ', '', $this->_table->fancify($col));
 			$variable = '_default'.$col;
 			return isset_val($this->$variable);
@@ -72,12 +73,14 @@
 		
 			$thisTable = $this->_table->table;
 			$joinTable = $thisTable.'_'.$otherTable;
+			$thisTableIDCol = $thisTable.'_id';
+			$otherTableIDCol = $otherTable.'_id';			
 			
 			$this->_table->beginTransaction();
 			$myID = $this->id;
 			
 			// Out with the old
-			$query = "DELETE FROM $joinTable WHERE $thisTable = $myID";
+			$query = "DELETE FROM $joinTable WHERE $thisTableIDCol = $myID";
 			$this->_table->update($query);
 			
 			$myUserID = $_SESSION['user_id'];
@@ -88,7 +91,7 @@
 				$otherTableID = $this->_table->clean($otherTableID);
 				$query = "
 					 INSERT INTO `$joinTable`
-					 	(`$otherTable`, `$thisTable`,`create_user`,`create_date`,`edit_user`,`edit_date`)
+					 	(`$otherTableIDCol`, `$thisTableIDCol`,`create_user_id`,`create_date`,`edit_user_id`,`edit_date`)
 					 VALUES
 					 	('$otherTableID', '$myID', '$myUserID', '$now', '$myUserID', '$now')
 					";
@@ -105,8 +108,11 @@
 			
 			$otherTableClass = $this->_table->controller->newTable($otherTable);
 			
-			$where = "$joinTable.$thisTable=$this->id";
-			$join = "LEFT JOIN $joinTable ON $joinTable.$otherTable = $otherTable.id";
+			$thisTableIDCol = $thisTable.'_id';
+			$otherTableIDCol = $otherTable.'_id';
+			
+			$where = "$joinTable.$thisTableIDCol=$this->id";
+			$join = "LEFT JOIN $joinTable ON $joinTable.$otherTableIDCol = $otherTable.id";
 			
 			$result = $otherTableClass->getRows("`$otherTable`.*", $where, "$otherTable.id", $join);
 			if(!$result) $result = array();

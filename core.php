@@ -64,11 +64,9 @@
 					}				}
 			}
 			require_once($controller);			$controller = $page.'Controller';			if(!class_exists($controller)) $this->error("You need [ <b>class $controller extends controller</b> ].");			$this->controller = new $controller($this);
-		}				/**		 * Loads the layout.		 * The layout will tell the controller to load its page.		 */		private function display()		{			require_once('../app/_layouts/'.$this->pageDetails['layout'].'Layout.php');		}				private function googleAnalytics($key)		{			$return = '';						if($key)			{				$return = <<<GOOGLEANALYTICS<!-- Google Analytics Code --><script type="text/javascript"> var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));</script> <script type="text/javascript"> try {var pageTracker = _gat._getTracker("$key");pageTracker._trackPageview();} catch(err) {}</script><!-- / Google Analytics Code -->GOOGLEANALYTICS;			}						return $return;		}				/**		 * If 'debug' is defined in the config, it will print an error message,		 * Otherwise, it just prints a '404' for the user.		 */		public function error($message = '')		{
+		}				/**		 * Loads the layout.		 * The layout will tell the controller to load its page.		 */		private function display()		{			require_once('../app/_layouts/'.$this->pageDetails['layout'].'Layout.php');		}				private function googleAnalytics($key)		{			$return = '';						if($key)			{				$return = <<<GOOGLEANALYTICS<!-- Google Analytics Code --><script type="text/javascript"> var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));</script> <script type="text/javascript"> try {var pageTracker = _gat._getTracker("$key");pageTracker._trackPageview();} catch(err) {}</script><!-- / Google Analytics Code -->GOOGLEANALYTICS;			}						return $return;		}				/**		 * If 'debug' is defined in the config, it will print an error message,		 * Otherwise, it just prints a '404' for the user.		 */		public function error($message = '')		{			$trace=debug_backtrace();
 			$log = '';
-			$log.= "<!--\n";
-			$trace=debug_backtrace();
-			$log.= print_r($trace, true);
+			$log.= "<!--\n";			$log.= "STACK TRACE: ".print_r($trace, true);			$log.= "POST: ".print_r($_POST, true);
 			$log.= "\n--><pre>";
 			foreach($trace as $file)
 			{
