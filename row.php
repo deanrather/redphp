@@ -66,7 +66,9 @@
 			if(right(3, $col) == '_id') $col = right(-3, ($col));
 			$col = str_replace(' ', '', $this->_table->fancify($col));
 			$variable = '_default'.$col;
-			return isset_val($this->$variable);
+			$default = false;
+			if(isset($this->$variable)) $default = $this->$variable;
+			return $default;
 		}
 		
 		public function attachTable($otherTable, $data){
