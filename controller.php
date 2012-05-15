@@ -62,7 +62,7 @@
 		 */
 		public function setLayout($layout)
 		{
-			$this->core->config['layout'] = $layout;
+			$this->core->pageDetails['layout'] = $layout;
 		}
 		
 		/**
