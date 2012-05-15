@@ -165,10 +165,15 @@
 		 * Integer:	"WHERE primary_key = <yourInt>" 1 row
 		 * String:	"WHERE <yourString>" n rows
 		 */
-		public function get($cols='*', $where=null, $sort=1, $join='')
+		public function get($cols='*', $where=null, $sort=1, $join='', $limit='', $offset='')
 		{
 			if($this->table == '') $this->controller->core->error('Tables need the $table set.');
 			if($cols=='*' && $join) $this->controller->core->error('You shouldnt select for * when using a join. Its likely some columns will overlap.');
+			
+			if($limit) $limit=$this->clean($limit);
+			if($offset) $offset=$this->clean($offset);
+			if($limit && $offset) $limit = "LIMIT $offset, $limit";
+			if($limit && !$offset) $limit = "LIMIT $limit";
 			
 			$depth = 'ALL';
 			if(!strstr($cols, '*') && !strpos($cols,',')) $depth = 'COL';
@@ -190,7 +195,7 @@
 					$depth = 'ROW';
 				}
 			}
-			$query = "SELECT $cols FROM `$this->table` $join WHERE $where ORDER BY $sort;";
+			$query = "SELECT $cols FROM `$this->table` $join WHERE $where ORDER BY $sort $limit;";
 			return $this->query($query, $depth);
 		}
 		
@@ -335,9 +340,9 @@
 		 * Gets several rows of this table, returns the row objects in an array.
 		 * @return unknown array(row)
 		 */
-		public function getRows($cols='*', $where=null, $sort=1, $join='')
+		public function getRows($cols='*', $where=null, $sort=1, $join='', $limit='', $offset='')
 		{
-			$data=$this->get($cols, $where, $sort, $join);
+			$data=$this->get($cols, $where, $sort, $join, $limit, $offset);
 			$rows = array();
 			foreach($data as $rowArray)
 			{
