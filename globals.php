@@ -16,6 +16,16 @@
 	}
 	
 	/**
+	 * If the value is set, returns the value. Else, returns default.
+	 * @param unknown_type $data
+	 * @param unknown_type $default
+	 */
+	function isset_default(&$data, $default)
+	{
+		return (isset($data) ? $data : $default); 
+	}
+	
+	/**
 	 * print_r's an array, wrapped in <pre> tags.
 	 */
 	function print_r_pre($array)
@@ -31,4 +41,5 @@
 		print_r_pre($array);
 		die();
 	}
+	
 ?>
