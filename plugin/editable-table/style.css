@@ -1,0 +1,72 @@
+@CHARSET "ISO-8859-1";
+
+h1 {margin: 0px 0px 10px 0px}
+h2 {margin: 0px 0px 10px 0px}
+
+.markdown-description h5 {margin-top:15px;}
+
+.wiki h1 {margin: 20px 0px 10px 0px}
+.wiki h2 {margin: 15px 0px 5px 0px}
+.wiki h3 {margin: 15px 0px 5px 0px}
+.wiki h4 {margin: 15px 0px 5px 0px}
+
+.editable .btn {width:75px}
+.table-display-int {width: 115px}
+input.table-edit-slider {width:85px}
+.table-edit-int {width: 95px}
+.popover-inner {width: 150px}
+.editable td.col-attacks {width: 125px}
+
+
+.del {text-decoration: line-through!important}
+
+input.text-name {width:100px}
+
+
+div.jGrowl.top-right {top:30px!important}
+
+.popup-window {
+	position: absolute;
+	top: 55px;
+	right: 159px;
+	display: none;
+	z-index: 10000;
+}
+
+
+a.nolink:hover {text-decoration: none; cursor:default; color:#08C}
+
+div.world a.dropdown-toggle {width:490px;}
+div.world input {width:500px;}
+div.world textarea {width:500px; height:300px}
+
+
+.table-multi-dropdown label input {
+  display:inline;
+}
+.table-multi-dropdown label {
+  display: block;
+  padding: 3px 15px;
+  clear: both;
+  font-weight: normal;
+  line-height: 18px;
+  color: #333333;
+  white-space: nowrap;
+}
+.table-multi-dropdown li > label:hover,
+.table-multi-dropdown ul .active > label,
+.table-multi-dropdown ul .active > label:hover {
+  color: #ffffff;
+  text-decoration: none;
+  background-color: #0088cc;
+  cursor: pointer;
+}
+
+.table-multi-dropdown li p {
+	display: inline;
+	position: relative;
+	top: 3px;
+}
+
+tr.pagination a {margin: 0px auto; float: none; display: block; line-height: initial; border: 1px solid #DDD}
+tr.filtration {border-bottom: 2px solid black;}
