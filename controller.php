@@ -78,7 +78,8 @@
 		 */
 		public function addJS($script)
 		{
-			$this->core->pageDetails['scripts'] .= '<script type="text/javascript" charset="ISO-8859-1" src="/js/'.$script.'.js"></script>'."\n";
+			$version = time();
+			$this->core->pageDetails['scripts'] .= '<script type="text/javascript" charset="ISO-8859-1" src="/js/'.$script.'.js?v='.$version.'"></script>'."\n";
 		}
 		
 		/**
