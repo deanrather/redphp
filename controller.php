@@ -76,10 +76,10 @@
 		/**
 		 * Add another .js file to the head
 		 */
-		public function addJS($script)
+		public function addJS($script, $version='')
 		{
-			$version = time();
-			$this->core->pageDetails['scripts'] .= '<script type="text/javascript" charset="ISO-8859-1" src="/js/'.$script.'.js?v='.$version.'"></script>'."\n";
+			if($version) $version = "?v=$version";
+			$this->core->pageDetails['scripts'] .= "<script type='text/javascript' charset='ISO-8859-1' src='/js{$script}.js{$version}'></script>\n";
 		}
 		
 		/**
@@ -178,5 +178,6 @@
 		{
 			$this->core->pageDetails['view'] = "../app$view";
 		}
+		
 	}
 ?>
