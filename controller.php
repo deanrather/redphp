@@ -164,7 +164,7 @@
 		public function setError($error='Error')
 		{
 			if(!session_id()) $this->core->error('You must use session_start(), or have "use_session" enabled in config.ini to use setError().');
-			$existingError = $_SESSION['error'];
+			$existingError = isset_val($_SESSION['error']);
 			if($existingError) $error = $existingError.'<br>'.$error;
 			$_SESSION['error'] = $error;
 		}
