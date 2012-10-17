@@ -56,7 +56,7 @@
 		public function insertData($data)
 		{
 			foreach($data as $col => $value) {
-				$this->$col = $value;
+				$this->$col = trim($value);
 			}
 			$this->edit_user_id = $_SESSION['user_id'];
 			$this->edit_date = time();
