@@ -1,11 +1,10 @@
 <?php
-	class app
+class app
+{
+	var $core = null;
+	
+	function app($core)
 	{
-		var $core = null;
-		
-		function app($core)
-		{
-			$this->core = $core;
-		}
+		$this->core = $core;
 	}
-?>
+}

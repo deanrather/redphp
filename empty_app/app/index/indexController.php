@@ -1,9 +1,8 @@
 <?php
-	class indexController extends Controller
+class indexController extends Controller
+{
+	function indexView()
 	{
-		function indexView()
-		{
-			$this->view->message = 'Hello World.';
-		}
+		$this->view->message = 'Hello World.';
 	}
-?>
+}
