@@ -77,6 +77,15 @@ class core
 		$filename = "../etc/config.{$environment}.ini";
 		if(!file_exists($filename)) $filename = '../etc/config.ini';
 		$this->config = parse_ini_file($filename);
+		if($this->config['config_file'])
+		{
+			var_dump($this->config);
+			$this->config = parse_ini_file($this->config['config_file']);
+			exec('echo ~', $a, $b);
+			var_dump($a, $b);
+			var_dump($this->config);
+		}
+		echo 'non';
 		
 		$this->pageDetails['scripts']	= '';
 		$this->pageDetails['styles']	= '';
