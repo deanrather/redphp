@@ -78,7 +78,7 @@ class core
 		if(!file_exists($filename)) $filename = '../etc/config.ini';
 		if(!file_exists($filename)) $filename = _CONFIG_FILENAME_;
 		$this->config = parse_ini_file($filename);
-		if($this->config['config_file'])
+		if(isset($this->config['config_file']))
 		{
 			$this->config = parse_ini_file($this->config['config_file']);
 		}
