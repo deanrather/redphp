@@ -76,6 +76,7 @@ class core
 		$environment = $this->determineEnvironment();
 		$filename = "../etc/config.{$environment}.ini";
 		if(!file_exists($filename)) $filename = '../etc/config.ini';
+		if(!file_exists($filename)) $filename = _CONFIG_FILENAME_;
 		$this->config = parse_ini_file($filename);
 		
 		$this->pageDetails['scripts']	= '';
