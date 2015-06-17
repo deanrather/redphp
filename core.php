@@ -40,12 +40,12 @@ class core
 	
 	private function getIncludes()
 	{
-		require_once('globals.php');
-		if(file_exists('../etc/globals.php')) require_once('../etc/globals.php');
-		require_once('controller.php');
-		require_once('view.php');
-		require_once('table.php');
-		require_once('row.php');
+		require_once(REDPHP_DIR . '/globals.php');
+		if(file_exists(APP_DIR . '/etc/globals.php')) require_once(APP_DIR . '/etc/globals.php');
+		require_once(REDPHP_DIR . '/controller.php');
+		require_once(REDPHP_DIR . '/view.php');
+		require_once(REDPHP_DIR . '/table.php');
+		require_once(REDPHP_DIR . '/row.php');
 	}
 
 	/**
@@ -54,9 +54,9 @@ class core
 	 */
 	private function determineEnvironment()
 	{
-		if(file_exists('../etc/determineEnvironment.php'))
+		if(file_exists(APP_DIR . '/etc/determineEnvironment.php'))
 		{
-			require_once('../etc/determineEnvironment.php');
+			require_once(APP_DIR . '/etc/determineEnvironment.php');
 			$env = determineEnvironment::determine();
 			define('ENV', $env);
 			return $env;
@@ -74,9 +74,9 @@ class core
 	private function loadConfig()
 	{
 		$environment = $this->determineEnvironment();
-		$filename = "../etc/config.{$environment}.ini";
-		if(!file_exists($filename)) $filename = '../etc/config.ini';
-		if(!file_exists($filename)) $filename = _CONFIG_FILENAME_;
+		$filename = APP_DIR . "/etc/config.{$environment}.ini";
+		if(!file_exists($filename)) $filename = APP_DIR . '/etc/config.ini';
+		if(!file_exists($filename)) $filename = CONFIG_FILENAME;
 		$this->config = parse_ini_file($filename);
 		
 		$this->pageDetails['scripts']	= '';
@@ -152,18 +152,18 @@ class core
 	 */
 	private function loadApp()
 	{
-		if(file_exists('../app/app.php'))
+		if(file_exists(APP_DIR . '/app.php'))
 		{
-			require_once('../app/app.php');
+			require_once(APP_DIR . '/app.php');
 			$this->app = new app($this);
 		}
-		if(file_exists('../app/view.php'))
+		if(file_exists(APP_DIR . '/view.php'))
 		{
-			require_once('../app/view.php');
+			require_once(APP_DIR . '/view.php');
 		}
-		if(file_exists('../app/controller.php'))
+		if(file_exists(APP_DIR . '/controller.php'))
 		{
-			require_once('../app/controller.php');
+			require_once(APP_DIR . '/controller.php');
 		}
 	}
 	
@@ -177,13 +177,13 @@ class core
 		$page = (isset($this->uri[1]) ? $this->uri[1] : 'index');
 		$app = str_replace('-', '_', $app);
 		$page = str_replace('-', '_', $page);
-		$controller = '../app/'.$app.'/'.$page.'Controller.php';
+		$controller = APP_DIR . '/'.$app.'/'.$page.'Controller.php';
 		if (!file_exists($controller)) {
-			$controller = "../app/$app/{$app}Controller.php";
+			$controller = APP_DIR . "/app/$app/{$app}Controller.php";
 			$page = $app;
 			if (!file_exists($controller)) {
 				$oldController = $controller;
-				$controller = '../app/index/defaultController.php';
+				$controller = APP_DIR . '/index/defaultController.php';
 				$page = 'default';
 				if (!file_exists($controller)) {
 					$newInstallMsg="<hr />If you're still setting up redphp, perhaps dean should update this error message.";
@@ -210,7 +210,7 @@ class core
 	 */
 	private function display()
 	{
-		require_once('../app/_layouts/'.$this->pageDetails['layout'].'Layout.php');
+		require_once(APP_DIR . '/_layouts/'.$this->pageDetails['layout'].'Layout.php');
 	}
 	
 	private function googleAnalytics($key)
@@ -259,9 +259,9 @@ GOOGLEANALYTICS;
 		{
 			die($log);
 		} else {
-			$file = fopen('../etc/error.log', 'a');
+			$file = fopen(LOG_DIR.'/redphp-error.log', 'a');
 			fwrite($file, date('r')." ========================================\n$log\n\n");
-			if(file_exists('../app/index/404View.php'))
+			if(file_exists(APP_DIR . '/index/404View.php'))
 			{
 				$this->controller = new controller($this);
 				if (class_exists('appView')) {
@@ -269,8 +269,8 @@ GOOGLEANALYTICS;
 				} else {
 					$this->controller->view = new view($this->controller);
 				}
-				$this->pageDetails['view'] = '../app/index/404View.php';
-				require_once('../app/_layouts/'.$this->pageDetails['layout'].'Layout.php');
+				$this->pageDetails['view'] = APP_DIR . '/index/404View.php';
+				require_once(APP_DIR . '/_layouts/'.$this->pageDetails['layout'].'Layout.php');
 				exit;
 			} else {
 				die('404');

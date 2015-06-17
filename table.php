@@ -400,7 +400,7 @@ class table
 		
 		if(!isset_true($_GET['sql-log'])) {
 			$date = date('Y-m-d H:i:s');
-			file_put_contents(_LOG_DIR_.'/site-sql.log', "\n\n$date\n$log", FILE_APPEND);
+			file_put_contents(LOG_DIR.'/site-sql.log', "\n\n$date\n$log", FILE_APPEND);
 		}
 		
 	}
