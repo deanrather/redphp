@@ -78,6 +78,10 @@ class core
 		if(!file_exists($filename)) $filename = APP_DIR . '/etc/config.ini';
 		if(!file_exists($filename)) $filename = CONFIG_FILENAME;
 		$this->config = parse_ini_file($filename);
+		if(isset($this->config['config_file']))
+		{
+			$this->config = parse_ini_file($this->config['config_file']);
+		}
 		
 		$this->pageDetails['scripts']	= '';
 		$this->pageDetails['styles']	= '';
