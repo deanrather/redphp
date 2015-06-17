@@ -6,7 +6,7 @@ class editableController extends appController {
 	public $tableName = '';
 	
 	function indexView(){
-		$this->addJS('tableEditor');
+		$this->addJS('/build/js/tableEditor.js');
 		
 		$table = $this->newTable($this->tableName);
 		
@@ -39,7 +39,7 @@ class editableController extends appController {
 	}
 	
 	function editView(){
-		$this->addJS('tableEditor');
+		$this->addJS('/build/js/tableEditor.js');
 		$table = $this->newTable($this->tableName);
 		
 		// CREATE / UPDATE

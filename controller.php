@@ -39,7 +39,7 @@ class controller
 			if(isset($core->uri[1])) $page = $core->uri[1];
 			$action = $page.'View';
 			if(!method_exists($this, $action)) $action='defaultView';
-			$this->core->pageDetails['view'] = '../app/'.$app.'/'.$app.($page=='index' ? '' : '-'.$page).'View.php';
+			$this->core->pageDetails['view'] = APP_DIR . '/pages/'.$app.'/'.$app.($page=='index' ? '' : '-'.$page).'View.php';
 			$this->$action();
 		}
 	}
@@ -95,7 +95,7 @@ class controller
 	 */
 	public function addCSS($style)
 	{
-		$this->core->pageDetails['styles'] .= '<link rel="stylesheet" type="text/css" href="/css/'.$style.'.css" />'."\n";
+		$this->core->pageDetails['styles'] .= '<link rel="stylesheet" type="text/css" href="'.$style.'" />'."\n";
 	}
 	
 	/**
@@ -104,7 +104,7 @@ class controller
 	 */
 	public function newTable($table)
 	{
-		$file = '../app/_tables/'.$table.'Table.php';
+		$file = APP_DIR . '/tables/'.$table.'Table.php';
 		if(!file_exists($file)) $this->core->error("Error including table. [<b> $file </b>] doesn't exist.");
 		require_once($file);
 		$table = $table.'Table';
@@ -177,7 +177,7 @@ class controller
 	 */
 	public function setView($view='')
 	{
-		$this->core->pageDetails['view'] = "../app$view";
+		$this->core->pageDetails['view'] = APP_DIR . "/app$view";
 	}
 	
 }

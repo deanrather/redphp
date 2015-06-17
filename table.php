@@ -301,7 +301,7 @@ class table
 	 */
 	public function createRow($userID = false)
 	{
-		$file = "../app/_tables/".$this->table.'Row.php';
+		$file = APP_DIR . "/tables/".$this->table.'Row.php';
 		if(file_exists($file)) {
 			require_once($file);
 			$class = $this->table.'Row';

@@ -8,8 +8,8 @@
 		function app($core)
 		{
 			$this->core = $core;
-			//$this->addCSS('docs');
-			$this->addCSS('style');
+			//$this->addCSS('/build/css/docs.css');
+			$this->addCSS('/build/css/style1.css');
 			
 			if(!self::$instance) self::$instance=$this;
 			

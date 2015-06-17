@@ -28,7 +28,7 @@ class view
 	
 	public function render($view)
 	{
-		require("../app/$view");
+		require(APP_DIR . "/$view");
 	}
 	
 	/**

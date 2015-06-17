@@ -181,9 +181,9 @@ class core
 		$page = (isset($this->uri[1]) ? $this->uri[1] : 'index');
 		$app = str_replace('-', '_', $app);
 		$page = str_replace('-', '_', $page);
-		$controller = APP_DIR . '/'.$app.'/'.$page.'Controller.php';
+		$controller = APP_DIR . '/pages/'.$app.'/'.$page.'Controller.php';
 		if (!file_exists($controller)) {
-			$controller = APP_DIR . "/app/$app/{$app}Controller.php";
+			$controller = APP_DIR . "/pages/$app/{$app}Controller.php";
 			$page = $app;
 			if (!file_exists($controller)) {
 				$oldController = $controller;
@@ -214,7 +214,7 @@ class core
 	 */
 	private function display()
 	{
-		require_once(APP_DIR . '/_layouts/'.$this->pageDetails['layout'].'Layout.php');
+		require_once(APP_DIR . '/layouts/'.$this->pageDetails['layout'].'Layout.php');
 	}
 	
 	private function googleAnalytics($key)
@@ -274,7 +274,7 @@ GOOGLEANALYTICS;
 					$this->controller->view = new view($this->controller);
 				}
 				$this->pageDetails['view'] = APP_DIR . '/index/404View.php';
-				require_once(APP_DIR . '/_layouts/'.$this->pageDetails['layout'].'Layout.php');
+				require_once(APP_DIR . '/layouts/'.$this->pageDetails['layout'].'Layout.php');
 				exit;
 			} else {
 				die('404');
