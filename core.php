@@ -174,22 +174,40 @@ class core
 	/**
 	 * Loads the controller, tells it which page it will load later.
 	 * The layout will tell the controller to load the page.
+	 * 
+	 * 
+	 * Browsing to <host>/ will attempt to load:
+	 * APP_DIR/pages/
+	 *  1. index/indexController.php
+	 *  2. index/indexController.php
+	 *  3. index/defaultController.php
+	 * 
+	 * Browsing to <host>/foo will attempt to load:
+	 * APP_DIR/pages/
+	 *  1. foo/indexController.php
+	 *  2. foo/fooController.php
+	 *  3. index/defaultController.php
+	 * 
+	 * Browsing to <host>/foo/bar will attempt to load:
+	 * APP_DIR/pages/
+	 *  1. foo/barController.php
+	 *  2. foo/fooController.php
+	 *  3. index/defaultController.php
 	 */
 	private function loadController()
 	{
-		$app = (isset($this->uri[1]) ? $this->uri[1] : 'index');
-		$page = (isset($this->uri[2]) ? $this->uri[2] : 'index');
-		$app = str_replace('-', '_', $app);
-		$page = str_replace('-', '_', $page);
-		$controller = APP_DIR . '/pages/'.$app.'/'.$page.'Controller.php';
-		echo $controller; exit;
+		$foo = (isset($this->uri[0]) ? $this->uri[0] : 'index');
+		$bar = (isset($this->uri[1]) ? $this->uri[1] : 'index');
+		$foo = str_replace('-', '_', $foo);
+		$bar = str_replace('-', '_', $bar);
+		$controller = APP_DIR . "/pages/${foo}/${bar}Controller.php";
 		if (!file_exists($controller)) {
-			$controller = APP_DIR . "/pages/$app/{$app}Controller.php";
-			$page = $app;
+			$controller = APP_DIR . "/pages/${foo}/{$foo}Controller.php";
+			$bar = $foo;
 			if (!file_exists($controller)) {
 				$oldController = $controller;
 				$controller = APP_DIR . '/index/defaultController.php';
-				$page = 'default';
+				$bar = 'default';
 				if (!file_exists($controller)) {
 					$newInstallMsg="<hr />If you're still setting up redphp, perhaps dean should update this error message.";
 					$this->error("You need [ <b>$oldController</b> ] or [<b>$controller</b>].$newInstallMsg");
@@ -197,12 +215,12 @@ class core
 			}
 		}
 		require_once($controller);
-		$controller = $app.'Controller';
+		$controller = $foo.'Controller';
 		if (!class_exists($controller)) {
 			
-			$controller = $page.'Controller';
+			$controller = $bar.'Controller';
 			if (!class_exists($controller)) {
-				$this->error("You need [<b>{$app}Controller extends controller </b>] or [ <b>class $controller extends controller</b> ].");
+				$this->error("You need [<b>{$foo}Controller extends controller </b>] or [ <b>class $controller extends controller</b> ].");
 			}
 			
 		}
