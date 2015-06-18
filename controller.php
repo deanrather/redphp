@@ -118,7 +118,6 @@ class controller
 	 */
 	public function redirect($url=false)
 	{
-		// echo "Redirecting";
 		// check nothings been printed yet
 		if(ob_get_contents()) $this->core->error("Shouldn't redirect. There's output. [$url]");
 		
@@ -129,6 +128,9 @@ class controller
 		
 		$url = 'http://'.$_SERVER['HTTP_HOST'].$slash.$url;
 		
+		$this->core->error("Redirecting to: $url");
+		echo "<pre>Redirecting to <a href='$url'>$url</a></pre>"; exit;
+		
 		// send them to new url
 		header("location:$url");
 		exit;
@@ -138,13 +140,9 @@ class controller
 	 * Redirect back to the previous page (good for clearing POST)
 	 */
 	public function redirectBack()
-	{	
-		// check nothings been printed yet
-		if(ob_get_contents()) $this->core->error("Shouldn't redirect. There's output.");
-		
+	{
 		$url = $_SERVER['HTTP_REFERER'];
-		header("location:$url");
-		exit;
+		$this->redirect($url);
 	}
 	
 	/**

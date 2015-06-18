@@ -177,11 +177,12 @@ class core
 	 */
 	private function loadController()
 	{
-		$app = (isset($this->uri[0]) ? $this->uri[0] : 'index');
-		$page = (isset($this->uri[1]) ? $this->uri[1] : 'index');
+		$app = (isset($this->uri[1]) ? $this->uri[1] : 'index');
+		$page = (isset($this->uri[2]) ? $this->uri[2] : 'index');
 		$app = str_replace('-', '_', $app);
 		$page = str_replace('-', '_', $page);
 		$controller = APP_DIR . '/pages/'.$app.'/'.$page.'Controller.php';
+		echo $controller; exit;
 		if (!file_exists($controller)) {
 			$controller = APP_DIR . "/pages/$app/{$app}Controller.php";
 			$page = $app;
@@ -247,6 +248,8 @@ GOOGLEANALYTICS;
 	 */
 	public function error($message = '')
 	{
+		
+		throw new \Exception($message);
 		header("Status: 404 Not Found");
 		$trace=debug_backtrace();
 		$log = '';

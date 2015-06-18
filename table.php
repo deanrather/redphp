@@ -394,8 +394,7 @@ class table
 		while(strstr($file['file'], 'redphp')) {
 			$file = $trace[++$i];
 		}
-		$string = $file['file'].' ('.$file['line']."):\n";
-		$log = $string . $query;
+		$log = $file['file'].' ('.$file['line']."): $query";
 		$this->controller->core->queries[] = $log;
 		
 		if(!isset_true($_GET['sql-log'])) {
