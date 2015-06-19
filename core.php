@@ -41,7 +41,7 @@ class core
 	private function getIncludes()
 	{
 		require_once(REDPHP_DIR . '/globals.php');
-		if(file_exists(APP_DIR . '/etc/globals.php')) require_once(APP_DIR . '/etc/globals.php');
+		if(file_exists(APP_DIR . '/globals.php')) require_once(APP_DIR . '/globals.php');
 		require_once(REDPHP_DIR . '/controller.php');
 		require_once(REDPHP_DIR . '/view.php');
 		require_once(REDPHP_DIR . '/table.php');
