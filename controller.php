@@ -79,7 +79,7 @@ class controller
 	public function addJS($script, $version='')
 	{
 		if($version) $version = "?v=$version";
-		$this->core->pageDetails['scripts'] .= "<script type='text/javascript' charset='ISO-8859-1' src='/js/{$script}.js{$version}'></script>\n";
+		$this->core->pageDetails['scripts'] .= "<script type='text/javascript' charset='ISO-8859-1' src='{$script}{$version}'></script>\n";
 	}
 	
 	/**
