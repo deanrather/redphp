@@ -394,12 +394,11 @@ class table
 		while(strstr($file['file'], 'redphp')) {
 			$file = $trace[++$i];
 		}
-		$log = $file['file'].' ('.$file['line']."): $query";
+		$log = date('Y-m-d H:i:s') . ' ' . $file['file'].' ('.$file['line']."):	$query";
 		$this->controller->core->queries[] = $log;
 		
 		if(!isset_true($_GET['sql-log'])) {
-			$date = date('Y-m-d H:i:s');
-			file_put_contents(LOG_DIR.'/site-sql.log', "\n\n$date\n$log", FILE_APPEND);
+			file_put_contents(LOG_DIR.'/site-sql.log', "$log\n", FILE_APPEND);
 		}
 		
 	}
