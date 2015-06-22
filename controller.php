@@ -136,15 +136,6 @@ echo "<pre>Redirecting to <a href='$url'>$url</a></pre>"; exit;
 	}
 	
 	/**
-	 * Redirect back to the previous page (good for clearing POST)
-	 */
-	public function redirectBack()
-	{
-		$url = $_SERVER['HTTP_REFERER'];
-		$this->redirect($url);
-	}
-	
-	/**
 	 * Sets a note to be retrieved by a view's $this->getNotes() function.
 	 */
 	public function setNote($note='OK')
