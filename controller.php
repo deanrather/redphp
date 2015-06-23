@@ -165,7 +165,7 @@ echo "<pre>Redirecting to <a href='$url'>$url</a></pre>"; exit;
 	 */
 	public function setView($view='')
 	{
-		$this->core->pageDetails['view'] = APP_DIR . "/app$view";
+		$this->core->pageDetails['view'] = APP_DIR . "/pages$view";
 	}
 	
 }
