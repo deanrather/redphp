@@ -128,7 +128,7 @@ class controller
 		
 		$url = 'http://'.$_SERVER['HTTP_HOST'].$slash.$url;
 		
-echo "<pre>Redirecting to <a href='$url'>$url</a></pre>"; exit;
+// echo "<pre>Redirecting to <a href='$url'>$url</a></pre>"; exit;
 		
 		// send them to new url
 		header("location:$url");
